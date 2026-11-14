@@ -1,0 +1,1475 @@
+{
+ "meta": {
+  "unidades": "masa kg · potencia W · energía Wh · datos MB · costo M$ (millones USD) · Δv m/s",
+  "version": "1.0"
+ },
+ "lanzadores": [
+  {
+   "id": "ride_leo",
+   "nombre": "Viaje compartido SSO (clase Transporter)",
+   "clase": "compartido",
+   "leo_kg": 300,
+   "sso_kg": 300,
+   "gto_kg": null,
+   "tli_kg": null,
+   "costo": null,
+   "costo_por_kg": 0.007,
+   "costo_min": 0.35,
+   "fiabilidad": 99,
+   "espera_meses": 9,
+   "nota": "≈7 000 $/kg publicado; mínimo, tope de 300 kg y espera son valores de juego. Órbita y fecha fijas.",
+   "real": [
+    "costo_por_kg"
+   ]
+  },
+  {
+   "id": "electron",
+   "nombre": "Electron",
+   "clase": "pequeño",
+   "leo_kg": 300,
+   "sso_kg": 200,
+   "gto_kg": null,
+   "tli_kg": 25,
+   "costo": 7.5,
+   "fiabilidad": 95,
+   "espera_meses": 12,
+   "nota": "TLI: 25 kg demostrado con CAPSTONE y la etapa Lunar Photon.",
+   "real": [
+	"leo_kg",
+	"sso_kg",
+	"tli_kg",
+    "costo"
+   ]
+  },
+  {
+   "id": "falcon9",
+   "nombre": "Falcon 9",
+   "clase": "medio",
+   "leo_kg": 22800,
+   "sso_kg": 15000,
+   "gto_kg": 8300,
+   "tli_kg": 5000,
+   "costo": 70,
+   "fiabilidad": 99,
+   "espera_meses": 18,
+   "nota": "LEO y GTO desechable. SSO y TLI estimados (no publicados).",
+   "real": [
+	"leo_kg",
+	"gto_kg",
+    "costo"
+   ]
+  },
+  {
+   "id": "vulcan",
+   "nombre": "Vulcan Centaur VC6",
+   "clase": "pesado",
+   "leo_kg": 27200,
+   "sso_kg": 23900,
+   "gto_kg": 14500,
+   "tli_kg": 11500,
+   "geo_kg": 6500,
+   "costo": 140,
+   "fiabilidad": 96,
+   "espera_meses": 24,
+   "nota": "Inserción directa en GEO: la nave se ahorra el motor de apogeo. Precio real desde ≈110 M$.",
+   "real": [
+	"leo_kg",
+	"sso_kg",
+	"gto_kg",
+	"tli_kg",
+    "geo_kg"
+   ]
+  },
+  {
+   "id": "fheavy",
+   "nombre": "Falcon Heavy (desechable)",
+   "clase": "pesado",
+   "leo_kg": 63800,
+   "sso_kg": 45000,
+   "gto_kg": 26700,
+   "tli_kg": 18000,
+   "costo": 150,
+   "fiabilidad": 98,
+   "espera_meses": 24,
+   "nota": "97 M$ recuperando propulsores, con menos capacidad. SSO y TLI estimados.",
+   "real": [
+	"leo_kg",
+    "gto_kg"
+   ]
+  },
+  {
+   "id": "sls",
+   "nombre": "SLS Block 1",
+   "clase": "superpesado",
+   "leo_kg": 95000,
+   "sso_kg": null,
+   "gto_kg": null,
+   "tli_kg": 27000,
+   "costo": 2500,
+   "fiabilidad": 95,
+   "espera_meses": 60,
+   "nota": "Solo modo libre: enseña por qué casi ninguna misión científica puede pagarlo.",
+   "real": [
+	"leo_kg",
+	"tli_kg",
+    "costo"
+   ]
+  },
+  {
+   "id": "ride_tli",
+   "nombre": "Viaje compartido lunar (puerto ESPA)",
+   "clase": "compartido",
+   "leo_kg": null,
+   "sso_kg": null,
+   "gto_kg": null,
+   "tli_kg": 300,
+   "costo": 12,
+   "fiabilidad": 97,
+   "espera_meses": 18,
+   "nota": "Pasajero secundario en un lanzamiento lunar. Precio y disponibilidad de juego.",
+   "real": []
+  }
+ ],
+ "estructuras": [
+  {
+   "id": "cube3u",
+   "nombre": "CubeSat 3U",
+   "clase": "cube",
+   "masa_seca": 2,
+   "carga_max_kg": 2,
+   "masa_max_kg": 6,
+   "potencia_base_w": 2,
+   "memoria_gb": 8,
+   "costo": 0.25,
+   "desarrollo_meses": 12,
+   "ancla": "Estándar CubeSat: ≈2 kg por U"
+  },
+  {
+   "id": "cube6u",
+   "nombre": "CubeSat 6U",
+   "clase": "cube",
+   "masa_seca": 4.5,
+   "carga_max_kg": 5,
+   "masa_max_kg": 12,
+   "potencia_base_w": 5,
+   "memoria_gb": 32,
+   "costo": 0.6,
+   "desarrollo_meses": 14,
+   "ancla": "Clase LunaH-Map / Lunar Flashlight"
+  },
+  {
+   "id": "cube12u",
+   "nombre": "CubeSat 12U",
+   "clase": "cube",
+   "masa_seca": 9,
+   "carga_max_kg": 10,
+   "masa_max_kg": 25,
+   "potencia_base_w": 10,
+   "memoria_gb": 64,
+   "costo": 1.5,
+   "desarrollo_meses": 18,
+   "ancla": "CAPSTONE: 12U, 25 kg"
+  },
+  {
+   "id": "espa",
+   "nombre": "SmallSat clase ESPA",
+   "clase": "small",
+   "masa_seca": 70,
+   "carga_max_kg": 60,
+   "masa_max_kg": 318,
+   "potencia_base_w": 45,
+   "memoria_gb": 256,
+   "costo": 8,
+   "desarrollo_meses": 24,
+   "ancla": "Puerto ESPA: hasta 318 kg"
+  },
+  {
+   "id": "leostar2",
+   "nombre": "Bus pequeño (clase LEOStar-2)",
+   "clase": "small",
+   "masa_seca": 150,
+   "carga_max_kg": 210,
+   "masa_max_kg": 600,
+   "potencia_base_w": 120,
+   "memoria_gb": 512,
+   "costo": 40,
+   "desarrollo_meses": 36,
+   "ancla": "TESS: 362 kg; carga útil ≤ 210 kg"
+  },
+  {
+   "id": "leostar3",
+   "nombre": "Bus mediano (clase LEOStar-3)",
+   "clase": "large",
+   "masa_seca": 1200,
+   "carga_max_kg": 800,
+   "masa_max_kg": 3200,
+   "potencia_base_w": 500,
+   "memoria_gb": 4000,
+   "costo": 130,
+   "desarrollo_meses": 48,
+   "ancla": "Landsat 9: 2 711 kg; bus 129.9 M$"
+  },
+  {
+   "id": "deep",
+   "nombre": "Orbitador de espacio profundo",
+   "clase": "large",
+   "masa_seca": 650,
+   "carga_max_kg": 150,
+   "masa_max_kg": 2000,
+   "potencia_base_w": 350,
+   "memoria_gb": 1000,
+   "costo": 150,
+   "desarrollo_meses": 54,
+   "ancla": "LRO: 1 018 kg en seco, 1 916 kg al lanzar"
+  }
+ ],
+ "paneles": [
+  {
+   "id": "pan8",
+   "nombre": "Montado en cuerpo 3U",
+   "cabe": [
+    "cube"
+   ],
+   "potencia_w": 8,
+   "masa": 0.15,
+   "eficiencia": 0.28,
+   "degradacion_anual": 0.02,
+   "costo": 0.02
+  },
+  {
+   "id": "pan30",
+   "nombre": "Desplegable 3U/6U",
+   "cabe": [
+    "cube"
+   ],
+   "potencia_w": 30,
+   "masa": 0.5,
+   "eficiencia": 0.295,
+   "degradacion_anual": 0.02,
+   "costo": 0.08
+  },
+  {
+   "id": "pan90",
+   "nombre": "Desplegable de alta potencia 6U/12U",
+   "cabe": [
+    "cube"
+   ],
+   "potencia_w": 90,
+   "masa": 1.2,
+   "eficiencia": 0.295,
+   "degradacion_anual": 0.02,
+   "costo": 0.25
+  },
+  {
+   "id": "pan400",
+   "nombre": "Ala SmallSat",
+   "cabe": [
+    "small"
+   ],
+   "potencia_w": 400,
+   "masa": 7,
+   "eficiencia": 0.3,
+   "degradacion_anual": 0.02,
+   "costo": 1.2
+  },
+  {
+   "id": "pan1500",
+   "nombre": "Doble ala rígida",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "potencia_w": 1500,
+   "masa": 25,
+   "eficiencia": 0.3,
+   "degradacion_anual": 0.02,
+   "costo": 4
+  },
+  {
+   "id": "pan4500",
+   "nombre": "Ala grande (clase Landsat)",
+   "cabe": [
+    "large"
+   ],
+   "potencia_w": 4500,
+   "masa": 70,
+   "eficiencia": 0.3,
+   "degradacion_anual": 0.02,
+   "costo": 12
+  },
+  {
+   "id": "rosa",
+   "nombre": "Enrollable ROSA (clase DART)",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "potencia_w": 6600,
+   "masa": 55,
+   "eficiencia": 0.32,
+   "degradacion_anual": 0.015,
+   "costo": 18
+  }
+ ],
+ "baterias": [
+  {
+   "id": "bat40",
+   "nombre": "Pack 40 Wh",
+   "cabe": [
+    "cube"
+   ],
+   "capacidad_wh": 40,
+   "masa": 0.3,
+   "dod_leo": 0.3,
+   "dod_alto": 0.7,
+   "costo": 0.01
+  },
+  {
+   "id": "bat80",
+   "nombre": "Pack 80 Wh",
+   "cabe": [
+    "cube"
+   ],
+   "capacidad_wh": 80,
+   "masa": 0.6,
+   "dod_leo": 0.3,
+   "dod_alto": 0.7,
+   "costo": 0.02
+  },
+  {
+   "id": "bat160",
+   "nombre": "Pack 160 Wh",
+   "cabe": [
+    "cube"
+   ],
+   "capacidad_wh": 160,
+   "masa": 1.2,
+   "dod_leo": 0.3,
+   "dod_alto": 0.7,
+   "costo": 0.05
+  },
+  {
+   "id": "bat500",
+   "nombre": "Módulo 500 Wh",
+   "cabe": [
+    "small"
+   ],
+   "capacidad_wh": 500,
+   "masa": 4.5,
+   "dod_leo": 0.3,
+   "dod_alto": 0.7,
+   "costo": 0.3
+  },
+  {
+   "id": "bat2000",
+   "nombre": "Módulo 2 kWh (clase LRO)",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "capacidad_wh": 2000,
+   "masa": 16,
+   "dod_leo": 0.35,
+   "dod_alto": 0.75,
+   "costo": 1
+  },
+  {
+   "id": "bat6000",
+   "nombre": "Banco 6 kWh",
+   "cabe": [
+    "large"
+   ],
+   "capacidad_wh": 6000,
+   "masa": 50,
+   "dod_leo": 0.35,
+   "dod_alto": 0.75,
+   "costo": 2.5
+  }
+ ],
+ "propulsion": [
+  {
+   "id": "none",
+   "nombre": "Sin propulsión",
+   "cabe": [
+	"cube",
+	"small",
+    "large"
+   ],
+   "tipo": "–",
+   "isp_s": 0,
+   "empuje_n": 0,
+   "masa_seca": 0,
+   "tanque_kg": 0,
+   "potencia_w": 0,
+   "costo": 0
+  },
+  {
+   "id": "coldgas",
+   "nombre": "Gas frío",
+   "cabe": [
+    "cube"
+   ],
+   "tipo": "gas frío",
+   "isp_s": 60,
+   "empuje_n": 0.05,
+   "masa_seca": 0.5,
+   "tanque_kg": 0.5,
+   "potencia_w": 2,
+   "costo": 0.15
+  },
+  {
+   "id": "mono_cube",
+   "nombre": "Monopropelente miniatura",
+   "cabe": [
+	"cube",
+    "small"
+   ],
+   "tipo": "hidracina / verde",
+   "isp_s": 215,
+   "empuje_n": 1,
+   "masa_seca": 1.5,
+   "tanque_kg": 4,
+   "potencia_w": 8,
+   "costo": 0.6
+  },
+  {
+   "id": "mono_small",
+   "nombre": "Hidracina SmallSat",
+   "cabe": [
+    "small"
+   ],
+   "tipo": "hidracina",
+   "isp_s": 225,
+   "empuje_n": 22,
+   "masa_seca": 12,
+   "tanque_kg": 80,
+   "potencia_w": 15,
+   "costo": 3
+  },
+  {
+   "id": "mono_large",
+   "nombre": "Hidracina grande (clase LRO)",
+   "cabe": [
+    "large"
+   ],
+   "tipo": "hidracina",
+   "isp_s": 220,
+   "empuje_n": 360,
+   "masa_seca": 60,
+   "tanque_kg": 900,
+   "potencia_w": 40,
+   "costo": 12
+  },
+  {
+   "id": "biprop",
+   "nombre": "Bipropelente con motor de apogeo",
+   "cabe": [
+    "large"
+   ],
+   "tipo": "MMH / NTO",
+   "isp_s": 320,
+   "empuje_n": 450,
+   "masa_seca": 90,
+   "tanque_kg": 2500,
+   "potencia_w": 50,
+   "costo": 20
+  },
+  {
+   "id": "hall",
+   "nombre": "Efecto Hall 600 W",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "tipo": "eléctrica",
+   "isp_s": 1500,
+   "empuje_n": 0.039,
+   "masa_seca": 15,
+   "tanque_kg": 40,
+   "potencia_w": 600,
+   "costo": 4
+  },
+  {
+   "id": "nextc",
+   "nombre": "Iónico de rejillas (clase NEXT-C)",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "tipo": "eléctrica",
+   "isp_s": 4100,
+   "empuje_n": 0.137,
+   "masa_seca": 60,
+   "tanque_kg": 300,
+   "potencia_w": 3500,
+   "costo": 25
+  }
+ ],
+ "comunicaciones": [
+  {
+   "id": "uhf",
+   "nombre": "UHF con antena de cinta",
+   "cabe": [
+    "cube"
+   ],
+   "banda": "UHF",
+   "frec_ghz": 0.437,
+   "mbps_leo": 0.0096,
+   "mbps_geo": 0,
+   "mbps_lunar": 0,
+   "potencia_w": 4,
+   "masa": 0.1,
+   "costo": 0.02,
+   "antena_tierra": "Yagi 3 m"
+  },
+  {
+   "id": "sband",
+   "nombre": "Banda S con parche",
+   "cabe": [
+	"cube",
+    "small"
+   ],
+   "banda": "S",
+   "frec_ghz": 2.2,
+   "mbps_leo": 2,
+   "mbps_geo": 0.1,
+   "mbps_lunar": 0.004,
+   "potencia_w": 8,
+   "masa": 0.3,
+   "costo": 0.12,
+   "antena_tierra": "3–11 m · 34 m en Luna"
+  },
+  {
+   "id": "xpatch",
+   "nombre": "Banda X con parche",
+   "cabe": [
+	"cube",
+	"small",
+    "large"
+   ],
+   "banda": "X",
+   "frec_ghz": 8.4,
+   "mbps_leo": 100,
+   "mbps_geo": 5,
+   "mbps_lunar": 0.128,
+   "potencia_w": 30,
+   "masa": 1.2,
+   "costo": 0.5,
+   "antena_tierra": "11 m · 34 m en Luna"
+  },
+  {
+   "id": "xhga",
+   "nombre": "Banda X con plato de 0.6 m",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "banda": "X",
+   "frec_ghz": 8.4,
+   "mbps_leo": 300,
+   "mbps_geo": 150,
+   "mbps_lunar": 4,
+   "potencia_w": 60,
+   "masa": 8,
+   "costo": 3,
+   "antena_tierra": "11 m · 34 m en Luna"
+  },
+  {
+   "id": "ka",
+   "nombre": "Banda Ka con plato orientable",
+   "cabe": [
+	"small",
+    "large"
+   ],
+   "banda": "Ka",
+   "frec_ghz": 26,
+   "mbps_leo": 1000,
+   "mbps_geo": 600,
+   "mbps_lunar": 100,
+   "potencia_w": 90,
+   "masa": 15,
+   "costo": 8,
+   "antena_tierra": "11–18 m · sensible a lluvia"
+  }
+ ],
+ "estaciones": [
+  {
+   "id": "gds",
+   "nombre": "Goldstone (DSN)",
+   "red": "DSN",
+   "lat": 35.4267,
+   "lon": -116.89,
+   "antena": "70 m + 34 m",
+   "bandas": "S, X, Ka",
+   "costo_anual": 2,
+   "uso": "cislunar y espacio profundo"
+  },
+  {
+   "id": "mad",
+   "nombre": "Madrid (DSN)",
+   "red": "DSN",
+   "lat": 40.4292,
+   "lon": -4.2492,
+   "antena": "70 m + 34 m",
+   "bandas": "S, X, Ka",
+   "costo_anual": 2,
+   "uso": "cislunar y espacio profundo"
+  },
+  {
+   "id": "cbr",
+   "nombre": "Canberra (DSN)",
+   "red": "DSN",
+   "lat": -35.4017,
+   "lon": 148.9822,
+   "antena": "70 m + 34 m",
+   "bandas": "S, X, Ka",
+   "costo_anual": 2,
+   "uso": "cislunar y espacio profundo"
+  },
+  {
+   "id": "sval",
+   "nombre": "Svalbard",
+   "red": "NSN comercial",
+   "lat": 78.23,
+   "lon": 15.41,
+   "antena": "11–13 m",
+   "bandas": "S, X, Ka",
+   "costo_anual": 1.5,
+   "uso": "ve casi todas las órbitas polares"
+  },
+  {
+   "id": "asf",
+   "nombre": "Fairbanks, Alaska",
+   "red": "NSN",
+   "lat": 64.86,
+   "lon": -147.85,
+   "antena": "11 m",
+   "bandas": "S, X, Ka",
+   "costo_anual": 1.5,
+   "uso": "polar norte"
+  },
+  {
+   "id": "mcm",
+   "nombre": "McMurdo, Antártida",
+   "red": "NSN",
+   "lat": -77.84,
+   "lon": 166.67,
+   "antena": "10 m",
+   "bandas": "S, X",
+   "costo_anual": 1.5,
+   "uso": "polar sur"
+  },
+  {
+   "id": "wal",
+   "nombre": "Wallops, Virginia",
+   "red": "NSN",
+   "lat": 37.94,
+   "lon": -75.46,
+   "antena": "11 m + 5 m",
+   "bandas": "VHF, S, X",
+   "costo_anual": 0.8,
+   "uso": "latitud media"
+  },
+  {
+   "id": "pun",
+   "nombre": "Punta Arenas, Chile",
+   "red": "NSN comercial",
+   "lat": -52.94,
+   "lon": -70.85,
+   "antena": "tribanda",
+   "bandas": "S, X, Ka",
+   "costo_anual": 1.2,
+   "uso": "sur"
+  },
+  {
+   "id": "wsc",
+   "nombre": "White Sands, Nuevo México",
+   "red": "NSN",
+   "lat": 32.5,
+   "lon": -106.61,
+   "antena": "18.3 m",
+   "bandas": "S, Ka",
+   "costo_anual": 1.5,
+   "uso": "Ka de alta tasa; LRO"
+  },
+  {
+   "id": "uni",
+   "nombre": "Estación universitaria propia",
+   "red": "propia",
+   "lat": null,
+   "lon": null,
+   "antena": "Yagi UHF / plato 3 m",
+   "bandas": "UHF, S",
+   "costo_anual": 0.05,
+   "uso": "el jugador elige la latitud"
+  }
+ ],
+ "usuario": [
+  {
+   "id": "l0",
+   "nombre": "Datos crudos (L0)",
+   "mult_ciencia": 0.6,
+   "costo_anual": 0,
+   "efecto": "Solo se archiva; poco valor para la comunidad"
+  },
+  {
+   "id": "l1",
+   "nombre": "Calibrados y georreferenciados (L1)",
+   "mult_ciencia": 1,
+   "costo_anual": 0.1,
+   "efecto": "Producto estándar"
+  },
+  {
+   "id": "l2",
+   "nombre": "Productos científicos (L2) y datos abiertos",
+   "mult_ciencia": 1.25,
+   "costo_anual": 0.4,
+   "efecto": "Requiere equipo científico; +25 % de ciencia"
+  }
+ ],
+ "instrumentos": [
+  {
+   "id": "cubecam",
+   "nombre": "Cámara multiespectral CubeSat",
+   "ref_real": "Cámaras tipo 1U–2U (típico)",
+   "masa": 0.9,
+   "activo_w": 4.5,
+   "espera_w": 0.5,
+   "mb_h": 900,
+   "ciclo_max": 0.5,
+   "sp_h": 4,
+   "costo": 0.15,
+   "objetivos": "Vegetación, agua, cobertura de suelo a resolución media",
+   "real": []
+  },
+  {
+   "id": "cam",
+   "nombre": "Cámara multiespectral de alta resolución",
+   "ref_real": "LROC, LRO: 19.2 kg, 24 W",
+   "masa": 19.2,
+   "activo_w": 24,
+   "espera_w": 6,
+   "mb_h": 6000,
+   "ciclo_max": 0.5,
+   "sp_h": 12,
+   "costo": 18,
+   "objetivos": "Cartografía, sitios de aterrizaje, cambios de superficie",
+   "real": [
+	"masa",
+    "activo_w"
+   ]
+  },
+  {
+   "id": "ir",
+   "nombre": "Espectrómetro / radiómetro infrarrojo",
+   "ref_real": "Diviner, LRO: 11.0 kg, 24.7 W",
+   "masa": 11,
+   "activo_w": 24.7,
+   "espera_w": 5,
+   "mb_h": 60,
+   "ciclo_max": 1,
+   "sp_h": 5,
+   "costo": 12,
+   "objetivos": "Temperatura de superficie, trampas frías, minerales, estrés hídrico",
+   "real": [
+	"masa",
+    "activo_w"
+   ]
+  },
+  {
+   "id": "sar",
+   "nombre": "Radar de apertura sintética (SAR)",
+   "ref_real": "Mini-RF, LRO: 13.8 kg, 7 W medios (demostrador)",
+   "masa": 60,
+   "activo_w": 500,
+   "espera_w": 20,
+   "mb_h": 30000,
+   "ciclo_max": 0.2,
+   "sp_h": 30,
+   "costo": 25,
+   "objetivos": "Imagen de día, de noche y con nubes; deformación, inundaciones, hielo",
+   "real": []
+  },
+  {
+   "id": "mag",
+   "nombre": "Magnetómetro fluxgate con mástil",
+   "ref_real": "Fluxgate de vuelo (típico)",
+   "masa": 1.2,
+   "activo_w": 2.5,
+   "espera_w": 0.8,
+   "mb_h": 0.5,
+   "ciclo_max": 1,
+   "sp_h": 0.1,
+   "costo": 0.4,
+   "objetivos": "Campo magnético, clima espacial, cola magnética terrestre",
+   "real": []
+  },
+  {
+   "id": "neut",
+   "nombre": "Detector de neutrones",
+   "ref_real": "LEND, LRO: 25.8 kg, 11.6 W",
+   "masa": 25.8,
+   "activo_w": 11.6,
+   "espera_w": 3,
+   "mb_h": 2,
+   "ciclo_max": 1,
+   "sp_h": 6,
+   "costo": 10,
+   "objetivos": "Hidrógeno y hielo de agua en el subsuelo; exige órbita baja",
+   "real": [
+	"masa",
+    "activo_w"
+   ]
+  },
+  {
+   "id": "uv",
+   "nombre": "Telescopio / espectrógrafo UV",
+   "ref_real": "LAMP, LRO: 6.1 kg, 4.0 W",
+   "masa": 6.1,
+   "activo_w": 4,
+   "espera_w": 1.5,
+   "mb_h": 30,
+   "ciclo_max": 1,
+   "sp_h": 4,
+   "costo": 8,
+   "objetivos": "Escarcha en cráteres en sombra, exosfera, astronomía UV",
+   "real": [
+	"masa",
+    "activo_w"
+   ]
+  },
+  {
+   "id": "rad",
+   "nombre": "Detector de radiación",
+   "ref_real": "CRaTER, LRO: 5.4 kg, 7.3 W",
+   "masa": 5.4,
+   "activo_w": 7.3,
+   "espera_w": 2,
+   "mb_h": 0.25,
+   "ciclo_max": 1,
+   "sp_h": 2,
+   "costo": 6,
+   "objetivos": "Dosis para tripulaciones; en tormenta solar: ×160 datos y ×5 puntos",
+   "real": [
+	"masa",
+	"activo_w",
+    "mb_h"
+   ]
+  }
+ ],
+ "misiones_reales": [
+  {
+   "id": "capstone",
+   "nombre": "CAPSTONE",
+   "anio": 2022,
+   "masa_kg": 25,
+   "potencia_w": null,
+   "regimen": "cislunar",
+   "orbita": "NRHO lunar",
+   "lanzador": "Electron + Lunar Photon",
+   "propulsion": "hidracina",
+   "instrumentos": [],
+   "carga": "Navegación autónoma (demostración)",
+   "costo_musd": 30,
+   "dato": "Primer CubeSat en NRHO; transferencia balística de unos 4 meses",
+   "ref": 17
+  },
+  {
+   "id": "lro",
+   "nombre": "Lunar Reconnaissance Orbiter",
+   "anio": 2009,
+   "masa_kg": 1916,
+   "potencia_w": 685,
+   "regimen": "cislunar",
+   "orbita": "polar lunar ≈50 km",
+   "lanzador": "Atlas V 401",
+   "propulsion": "hidracina",
+   "instrumentos": [
+	"cam",
+	"ir",
+	"neut",
+	"uv",
+	"rad",
+    "sar"
+   ],
+   "carga": "7 instrumentos",
+   "costo_musd": null,
+   "dato": "898 kg de combustible; 100 Mbps en banda Ka",
+   "ref": 10
+  },
+  {
+   "id": "landsat9",
+   "nombre": "Landsat 9",
+   "anio": 2021,
+   "masa_kg": 2711,
+   "potencia_w": 4300,
+   "regimen": "leo",
+   "orbita": "SSO 705 km, 98.2°",
+   "lanzador": "Atlas V 401",
+   "propulsion": "hidracina",
+   "instrumentos": [
+	"cam",
+    "ir"
+   ],
+   "carga": "OLI-2 + TIRS-2",
+   "costo_musd": 750,
+   "dato": "Repite cobertura cada 16 días; hasta 750 escenas al día",
+   "ref": 13
+  },
+  {
+   "id": "tess",
+   "nombre": "TESS",
+   "anio": 2018,
+   "masa_kg": 362,
+   "potencia_w": 530,
+   "regimen": "heo",
+   "orbita": "P/2, 13.7 días, 108 000 × 375 000 km",
+   "lanzador": "Falcon 9",
+   "propulsion": "hidracina",
+   "instrumentos": [
+    "cam"
+   ],
+   "carga": "4 cámaras de campo amplio",
+   "costo_musd": 287,
+   "dato": "Descarga solo en el perigeo; 200 M$ + 87 M$ de lanzamiento",
+   "ref": 14
+  },
+  {
+   "id": "clipper",
+   "nombre": "Europa Clipper",
+   "anio": 2024,
+   "masa_kg": 6065,
+   "potencia_w": null,
+   "regimen": "interplanetario",
+   "orbita": "Júpiter, sobrevuelos de Europa",
+   "lanzador": "Falcon Heavy desechable",
+   "propulsion": "bipropelente",
+   "instrumentos": [
+	"cam",
+	"ir",
+	"sar",
+	"mag",
+    "uv"
+   ],
+   "carga": "9 instrumentos",
+   "costo_musd": 5200,
+   "dato": "Paneles de 14.2 m cada uno: a 5 AU llega 1/25 de la luz",
+   "ref": 15
+  },
+  {
+   "id": "dart",
+   "nombre": "DART",
+   "anio": 2021,
+   "masa_kg": 610,
+   "potencia_w": 6600,
+   "regimen": "interplanetario",
+   "orbita": "heliocéntrica, impacto en Dimorphos",
+   "lanzador": "Falcon 9",
+   "propulsion": "hidracina + iónico",
+   "instrumentos": [
+    "cam"
+   ],
+   "carga": "DRACO (navegación)",
+   "costo_musd": 324.5,
+   "dato": "50 kg de hidracina + 60 kg de xenón; paneles ROSA",
+   "ref": 16
+  }
+ ],
+ "delta_v": [
+  {
+   "maniobra": "Mantener órbita LEO a 500 km",
+   "dv": "5–20 por año",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "Evasión de basura espacial",
+   "dv": "0.1–1 por maniobra",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "Desorbitar desde 500–700 km (bajar perigeo a ≈50 km)",
+   "dv": "130–190",
+   "tipo": "calculado"
+  },
+  {
+   "maniobra": "GTO → GEO (circularizar y quitar inclinación)",
+   "dv": "1 500–1 800",
+   "tipo": "real"
+  },
+  {
+   "maniobra": "Mantener posición en GEO",
+   "dv": "≈50 por año",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "LEO → inyección translunar (lo da el lanzador)",
+   "dv": "≈3 150",
+   "tipo": "calculado"
+  },
+  {
+   "maniobra": "Inserción en órbita lunar baja de 100 km, transferencia directa",
+   "dv": "≈850",
+   "tipo": "calculado"
+  },
+  {
+   "maniobra": "Inserción lunar tras transferencia balística (BLT)",
+   "dv": "≈650",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "Inserción y correcciones hasta NRHO vía BLT",
+   "dv": "≈200–250",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "Mantener órbita lunar polar de 50–100 km",
+   "dv": "≈100–150 por año",
+   "tipo": "juego"
+  },
+  {
+   "maniobra": "Mantener NRHO o halo L2",
+   "dv": "5–20 por año",
+   "tipo": "juego"
+  }
+ ],
+ "cuellos": [
+  {
+   "contador": "h_sin_energia",
+   "que_mide": "Horas con instrumentos cortados por DoD",
+   "causa_tipica": "Paneles o batería chicos para el eclipse",
+   "leccion": "La potencia media debe cubrir la carga media, y la batería el eclipse más largo"
+  },
+  {
+   "contador": "mb_perdidos",
+   "que_mide": "Datos descartados con la memoria llena",
+   "causa_tipica": "Instrumento voraz con antena lenta o pocas estaciones",
+   "leccion": "Generar datos no es hacer ciencia: hay que bajarlos"
+  },
+  {
+   "contador": "h_sin_contacto",
+   "que_mide": "Horas con datos en memoria y sin estación a la vista",
+   "causa_tipica": "Red de estaciones mal ubicada para la órbita",
+   "leccion": "La órbita decide qué estaciones sirven"
+  },
+  {
+   "contador": "dv_faltante",
+   "que_mide": "Maniobras omitidas por falta de propelente",
+   "causa_tipica": "Tanque o Isp insuficientes",
+   "leccion": "Tsiolkovski: cada kg extra de carga cuesta propelente"
+  },
+  {
+   "contador": "h_modo_seguro",
+   "que_mide": "Horas en modo seguro por eventos",
+   "causa_tipica": "Sin redundancia o reacción tardía",
+   "leccion": "El margen y la redundancia son ciencia futura"
+  },
+  {
+   "contador": "sp_fuera_objetivo",
+   "que_mide": "Puntos perdidos por instrumento u órbita inadecuados",
+   "causa_tipica": "Carga útil que no responde a la pregunta científica",
+   "leccion": "El objetivo científico manda sobre la ingeniería"
+  }
+ ],
+ "escenarios": [
+  {
+   "id": "s1",
+   "nivel": "Principiante · CML guiado",
+   "nombre": "CubeSat 101: Vigía de cuenca",
+   "objetivo": "Vigilar vegetación y cuerpos de agua de una cuenca durante una temporada, y medir el campo magnético como ciencia secundaria.",
+   "regimen": "leo",
+   "destino": "sso_kg",
+   "presupuesto": 2,
+   "meta_sp": 700,
+   "duracion_dias": 180,
+   "plazo_meses": 24,
+   "ops_anual": 0.3,
+   "estacion_anual": 0.05,
+   "min_por_bloque": 22,
+   "bloque": "estación universitaria",
+   "dv_min": 0,
+   "sobrecosto": 0,
+   "restricciones": [
+	"Masa máxima 12 kg (6U)",
+	"Presupuesto de 2 M$ con lanzamiento incluido",
+	"Altitud ≤ 550 km para reentrar en pocos años",
+    "Solo bandas UHF y S"
+   ],
+   "relevancia": {
+	"cubecam": 1,
+	"mag": 1,
+	"rad": 0.5,
+	"uv": 0.2,
+	"ir": 0.5,
+	"cam": 0.5,
+	"sar": 0.5,
+	"neut": 0
+   },
+   "perfiles": [
+	{
+	 "id": "sso500",
+	 "nombre": "SSO 500 km",
+	 "dv": 0,
+	 "f_sol": 0.62,
+	 "eclipse_min": 35.8,
+	 "dod": "dod_leo",
+	 "contacto": 1,
+	 "compartido_ok": true
+	}
+   ],
+   "lanzadores": [
+	"ride_leo",
+    "electron"
+   ],
+   "referencia": {
+	"perfil": "sso500",
+	"lv": "ride_leo",
+	"bus": "cube6u",
+	"pan": "pan30",
+	"bat": "bat80",
+	"prop": "none",
+	"propKg": 0,
+	"com": "sband",
+	"ins": [
+	 "cubecam",
+     "mag"
+	],
+	"duty": 100,
+	"bloques": 2
+   },
+   "eventos": [
+	{
+	 "id": "s1e1",
+	 "nombre": "La antena no se despliega",
+	 "cuando": "Día 1 · probabilidad 20 %",
+	 "impacto": "Sin enlace: 0 MB/día hasta resolver",
+	 "acciones": [
+	  "Reintentar el quemado del hilo: 70 % de éxito por intento, 1 día cada uno",
+      "Esperar a que el Sol caliente el mecanismo: 40 % por día, sin riesgo"
+	 ]
+	},
+	{
+	 "id": "s1e2",
+	 "nombre": "Tormenta geomagnética G3",
+	 "cuando": "Entre los días 30 y 150 · 3 días",
+	 "impacto": "Arrastre ×3; 25 % de reinicio del computador (6 h sin ciencia)",
+	 "acciones": [
+	  "Modo seguro: pierdes 3 días de ciencia, riesgo 0",
+	  "Seguir operando: conservas la ciencia y aceptas el 25 %",
+      "Con gas frío: recuperar altitud con 0.3 m/s"
+	 ]
+	},
+	{
+	 "id": "s1e3",
+	 "nombre": "Celda de batería degradada",
+	 "cuando": "Día 90 ± 20",
+	 "impacto": "Capacidad −20 % permanente",
+	 "acciones": [
+	  "Bajar el ciclo de trabajo en eclipse para no pasar de 30 % de DoD",
+      "Operar igual: cada eclipse por encima del límite suma 0.5 % de pérdida extra"
+	 ]
+	},
+	{
+	 "id": "s1e4",
+	 "nombre": "Estación fuera de servicio por lluvia y mantenimiento",
+	 "cuando": "Aleatorio · 5 días",
+	 "impacto": "−100 % de pases en una estación",
+	 "acciones": [
+	  "Guardar en memoria si queda espacio (8–32 GB)",
+	  "Comprar pases comerciales: 0.05 M$",
+      "Priorizar el magnetómetro: más puntos por MB"
+	 ]
+	},
+	{
+	 "id": "s1e5",
+	 "nombre": "Alerta de conjunción con basura espacial",
+	 "cuando": "Aleatorio · aviso con 48 h",
+	 "impacto": "2 % de perder la nave si no se actúa",
+	 "acciones": [
+	  "Con propulsión: 0.2 m/s y riesgo 0",
+	  "Sin propulsión: arrastre diferencial girando la nave; 1 día sin ciencia y riesgo 0.3 %",
+      "Ignorar: aceptas el 2 %"
+	 ]
+	}
+   ]
+  },
+  {
+   "id": "s2",
+   "nivel": "Intermedio · trades abiertos",
+   "nombre": "Centinela SSO: radar sobre inundaciones",
+   "objetivo": "Cartografiar inundaciones y deformación del terreno de día, de noche y con nubes, con apoyo térmico, durante dos años.",
+   "regimen": "leo",
+   "destino": "sso_kg",
+   "presupuesto": 150,
+   "meta_sp": 60000,
+   "duracion_dias": 730,
+   "plazo_meses": 48,
+   "ops_anual": 10,
+   "estacion_anual": 1.5,
+   "min_por_bloque": 55,
+   "bloque": "estación polar",
+   "dv_min": 150,
+   "sobrecosto": 0,
+   "restricciones": [
+	"Órbita heliosíncrona de 705 km y 98.2°, como Landsat",
+	"Δv ≥ 150 m/s reservado para evasión y desorbitado",
+	"Eclipse de 35 min en cada órbita de 98.9 min",
+    "El radar no supera 20 % de ciclo de trabajo"
+   ],
+   "relevancia": {
+	"sar": 1,
+	"ir": 1,
+	"cam": 1,
+	"cubecam": 0.3,
+	"mag": 0.2,
+	"uv": 0.3,
+	"rad": 0.5,
+	"neut": 0
+   },
+   "perfiles": [
+	{
+	 "id": "sso705",
+	 "nombre": "SSO 705 km (dedicado) o ≈525 km (compartido, −15 % ciencia)",
+	 "dv": 150,
+	 "f_sol": 0.64,
+	 "eclipse_min": 35.3,
+	 "dod": "dod_leo",
+	 "contacto": 1,
+	 "compartido_ok": false
+	}
+   ],
+   "lanzadores": [
+	"ride_leo",
+	"electron",
+	"falcon9",
+    "vulcan"
+   ],
+   "referencia": {
+	"perfil": "sso705",
+	"lv": "ride_leo",
+	"bus": "leostar2",
+	"pan": "pan1500",
+	"bat": "bat500",
+	"prop": "mono_small",
+	"propKg": 29,
+	"com": "xhga",
+	"ins": [
+	 "sar",
+     "ir"
+	],
+	"duty": 15,
+	"bloques": 2
+   },
+   "eventos": [
+	{
+	 "id": "s2e1",
+	 "nombre": "Eyección de masa coronal con protones (S3)",
+	 "cuando": "1 vez por año · 36 h",
+	 "impacto": "Paneles −2 % permanente; 20 % de latch-up en el radar si está activo (−50 % de rendimiento 48 h)",
+	 "acciones": [
+	  "Modo seguro: 36 h sin ciencia, sin daño al radar",
+	  "Apagar solo el radar: el IR sigue; −85 % de ciencia 36 h",
+      "Seguir: aceptas el 20 %"
+	 ]
+	},
+	{
+	 "id": "s2e2",
+	 "nombre": "Conjunción con un fragmento",
+	 "cuando": "2–4 por año · aviso con 72 h",
+	 "impacto": "5 % de pérdida de la nave si no se actúa",
+	 "acciones": [
+	  "Maniobra de 0.5 m/s: ≈0.07 kg de hidracina y 2 órbitas sin imagen",
+      "Esperar un mejor rastreo 24 h: 50 % de que se cancele; si no, la maniobra cuesta 1.5 m/s"
+	 ]
+	},
+	{
+	 "id": "s2e3",
+	 "nombre": "Tormenta sobre la estación polar",
+	 "cuando": "Aleatorio · 3 días",
+	 "impacto": "Banda Ka −80 %, banda X −10 %",
+	 "acciones": [
+	  "Cambiar a banda X si la llevas",
+	  "Grabar en memoria: 512 GB llenan en horas con el radar",
+      "Contratar McMurdo por el evento: 0.4 M$"
+	 ]
+	},
+	{
+	 "id": "s2e4",
+	 "nombre": "Falla una cadena de celdas",
+	 "cuando": "Día 300 ± 60",
+	 "impacto": "Capacidad −12.5 % permanente",
+	 "acciones": [
+	  "No operar el radar en eclipse: −30 % de adquisiciones nocturnas",
+      "Mantener y vigilar la DoD: por encima del 30 %, −1 % de capacidad por mes"
+	 ]
+	},
+	{
+	 "id": "s2e5",
+	 "nombre": "Anomalía en una rueda de reacción",
+	 "cuando": "Día 450 ± 90 · probabilidad 60 %",
+	 "impacto": "Apuntado degradado: calidad de imagen −40 %",
+	 "acciones": [
+	  "Si compraste la cuarta rueda (+2 M$ en diseño): conmutar en 6 h",
+      "Sin redundancia: 10 días de diagnóstico en modo seguro y control con magnetopares (−15 % permanente)"
+	 ]
+	}
+   ]
+  },
+  {
+   "id": "s3",
+   "nivel": "Avanzado · N-cuerpos crítico",
+   "nombre": "Polo Sur lunar: hielo y radiación para Artemis",
+   "objetivo": "Localizar hielo de agua en el polo sur lunar y medir la radiación que recibirán las tripulaciones, durante un año de ciencia.",
+   "regimen": "lunar",
+   "destino": "tli_kg",
+   "presupuesto": 85,
+   "meta_sp": 80000,
+   "duracion_dias": 365,
+   "plazo_meses": 36,
+   "ops_anual": 8,
+   "estacion_anual": 2,
+   "min_por_bloque": 60,
+   "bloque": "bloque DSN de 2 h/día",
+   "dv_min": 1000,
+   "sobrecosto": 6,
+   "restricciones": [
+	"Sin magnetosfera: +6 M$ de aviónica endurecida en buses pequeños",
+	"La inserción lunar es un quemado único: fuera de la ventana, la nave sigue de largo",
+	"En órbita baja la Luna tapa la Tierra casi la mitad del tiempo",
+    "Un eclipse lunar total deja a la nave ≈3 h sin Sol"
+   ],
+   "relevancia": {
+	"neut": 1,
+	"ir": 1,
+	"rad": 1,
+	"cam": 1,
+	"uv": 0.6,
+	"mag": 0.6,
+	"sar": 0.6,
+	"cubecam": 0.1
+   },
+   "perfiles": [
+	{
+	 "id": "llo_dir",
+	 "nombre": "Órbita polar baja 100 km · transferencia directa (4–5 días)",
+	 "dv": 1000,
+	 "f_sol": 0.61,
+	 "eclipse_min": 46.5,
+	 "dod": "dod_leo",
+	 "contacto": 1,
+	 "compartido_ok": true
+	},
+	{
+	 "id": "llo_blt",
+	 "nombre": "Órbita polar baja 100 km · transferencia balística (≈4 meses)",
+	 "dv": 800,
+	 "f_sol": 0.61,
+	 "eclipse_min": 46.5,
+	 "dod": "dod_leo",
+	 "contacto": 1,
+	 "compartido_ok": true,
+	 "dias_extra": 110
+	},
+	{
+	 "id": "nrho",
+	 "nombre": "NRHO 9:2 vía transferencia balística",
+	 "dv": 250,
+	 "f_sol": 0.98,
+	 "eclipse_min": 80,
+	 "dod": "dod_alto",
+	 "contacto": 2,
+	 "compartido_ok": true,
+	 "dias_extra": 110,
+	 "relevancia": {
+	  "neut": 0,
+	  "ir": 0.2,
+	  "cam": 0.2,
+	  "sar": 0,
+	  "uv": 0.4,
+	  "rad": 1,
+	  "mag": 1
+	 }
+	}
+   ],
+   "lanzadores": [
+	"ride_tli",
+	"falcon9",
+	"vulcan",
+    "fheavy"
+   ],
+   "referencia": {
+	"perfil": "llo_blt",
+	"lv": "ride_tli",
+	"bus": "espa",
+	"pan": "pan400",
+	"bat": "bat500",
+	"prop": "mono_small",
+	"propKg": 70,
+	"com": "xhga",
+	"ins": [
+	 "neut",
+	 "ir",
+     "rad"
+	],
+	"duty": 100,
+	"bloques": 1
+   },
+   "eventos": [
+	{
+	 "id": "s3e1",
+	 "nombre": "Válvula de propulsor atascada antes de la inserción lunar",
+	 "cuando": "Corrección de trayectoria 2 · probabilidad 35 %",
+	 "impacto": "Empuje −40 %: el quemado se alarga y las pérdidas por gravedad suben 6 % de Δv",
+	 "acciones": [
+	  "Quemado largo: +6 % de Δv (≈50 m/s)",
+	  "Rama redundante, si la compraste (+1.5 M$): sin penalidad",
+      "Replanificar a transferencia balística: +90 días y −150 m/s de inserción"
+	 ]
+	},
+	{
+	 "id": "s3e2",
+	 "nombre": "Evento de partículas solares en tránsito",
+	 "cuando": "1–2 por misión · 24–48 h",
+	 "impacto": "Paneles −3 %; rastreador estelar cegado 12 h (sin maniobras); detector de radiación ×5 puntos",
+	 "acciones": [
+	  "Modo seguro: sin ciencia y sin riesgo",
+	  "Dejar encendido solo el detector de radiación: bonificación ×5 y 5 % de reinicio",
+      "Seguir con todo: 15 % de daño en un instrumento (−30 %)"
+	 ]
+	},
+	{
+	 "id": "s3e3",
+	 "nombre": "Eclipse lunar total",
+	 "cuando": "Fecha conocida desde CML 1 · ≈3 h sin Sol",
+	 "impacto": "Energía necesaria = carga de supervivencia × 3 h; se permite DoD de hasta 80 % una vez",
+	 "acciones": [
+	  "Cargar al 100 %, precalentar y apagar instrumentos 2 h antes",
+	  "Si la batería no alcanza: bajo voltaje y 30 % de pérdida de la nave",
+      "En NRHO: ajustar la fase con 2 m/s para acortar la sombra a 1.3 h"
+	 ]
+	},
+	{
+	 "id": "s3e4",
+	 "nombre": "DSN congestionada",
+	 "cuando": "Aleatorio · 14 días",
+	 "impacto": "Tiempo de contacto −50 %",
+	 "acciones": [
+	  "Aceptar pases nocturnos de menor prioridad: recuperas la mitad",
+	  "Red comercial lunar: 0.6 M$ por el evento",
+      "Comprimir a bordo: −15 % de ciencia, datos al 40 %"
+	 ]
+	},
+	{
+	 "id": "s3e5",
+	 "nombre": "Deriva de órbita",
+	 "cuando": "Continuo: es el motor N-cuerpos, no una tirada",
+	 "impacto": "Órbita baja: el periluna cae ≈4 km por mes por los mascons. NRHO y halo: el error se duplica cada ≈7 días",
+	 "acciones": [
+	  "Mantenimiento periódico: 1–5 m/s por maniobra",
+	  "Saltarse dos ciclos en órbita baja: impacto en ≈6 meses",
+      "Órbita congelada: 12 m/s una vez, luego ≈1/3 del gasto"
+	 ]
+	}
+   ]
+  }
+ ]
+}
