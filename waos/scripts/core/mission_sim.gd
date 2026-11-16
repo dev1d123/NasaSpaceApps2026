@@ -737,7 +737,7 @@ func station_points() -> Array:
 	if regime != "leo":
 		return out
 	for st in _stations:
-		out.append({"nombre": st["nombre"], "eci": Astro.station_eci(st["lat"], st["lon"], t), "out": mod_active("station_out_" + st["id"])})
+		out.append({"id": st["id"], "nombre": st["nombre"], "eci": Astro.station_eci(st["lat"], st["lon"], t), "out": mod_active("station_out_" + st["id"])})
 	return out
 
 func resolve_event(idx: int) -> void:

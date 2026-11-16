@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/white_panel/color.png" id="1_nj6ob"]
+[ext_resource type="Texture2D" path="res://assets/textures/white_panel/normal.png" id="2_qhcyh"]
+[ext_resource type="Texture2D" path="res://assets/textures/white_panel/roughness.png" id="3_qbatb"]
+
+[resource]
+resource_name = "mat_blanco"
+albedo_color = Color(0.9411765, 0.9529412, 0.972549, 1)
+albedo_texture = ExtResource("1_nj6ob")
+metallic = 0.05
+roughness = 0.4
+roughness_texture = ExtResource("3_qbatb")
+normal_enabled = true
+normal_scale = 0.6
+normal_texture = ExtResource("2_qhcyh")
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 4.0

@@ -1,0 +1,20 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/carbon_frame/color.png" id="1_tyx2f"]
+[ext_resource type="Texture2D" path="res://assets/textures/carbon_frame/metallic.png" id="2_sj3m3"]
+[ext_resource type="Texture2D" path="res://assets/textures/carbon_frame/normal.png" id="3_2xtfy"]
+[ext_resource type="Texture2D" path="res://assets/textures/carbon_frame/roughness.png" id="4_2ymp2"]
+
+[resource]
+resource_name = "mat_celdas_marco"
+albedo_color = Color(0.13333334, 0.14117648, 0.16470589, 1)
+albedo_texture = ExtResource("1_tyx2f")
+metallic = 0.25
+metallic_texture = ExtResource("2_sj3m3")
+roughness = 0.65
+roughness_texture = ExtResource("4_2ymp2")
+normal_enabled = true
+normal_texture = ExtResource("3_2xtfy")
+uv1_scale = Vector3(8, 8, 8)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 4.0

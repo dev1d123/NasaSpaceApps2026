@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/solar/color.png" id="1_6chsf"]
+[ext_resource type="Texture2D" path="res://assets/textures/solar/metallic.png" id="2_t2bvu"]
+[ext_resource type="Texture2D" path="res://assets/textures/solar/normal.png" id="3_kgdn7"]
+[ext_resource type="Texture2D" path="res://assets/textures/solar/roughness.png" id="4_nw72w"]
+
+[resource]
+resource_name = "mat_celdas"
+albedo_color = Color(0.33333334, 0.4862745, 0.6392157, 1)
+albedo_texture = ExtResource("1_6chsf")
+metallic = 0.85
+metallic_texture = ExtResource("2_t2bvu")
+roughness = 0.22
+roughness_texture = ExtResource("4_nw72w")
+normal_enabled = true
+normal_scale = 1.2
+normal_texture = ExtResource("3_kgdn7")
+uv1_scale = Vector3(5, 5, 5)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 8.0

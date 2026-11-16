@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/foil_gold/color.png" id="1_d11do"]
+[ext_resource type="Texture2D" path="res://assets/textures/foil_gold/metallic.png" id="2_juav2"]
+[ext_resource type="Texture2D" path="res://assets/textures/foil_gold/normal.png" id="3_yql74"]
+[ext_resource type="Texture2D" path="res://assets/textures/foil_gold/roughness.png" id="4_j4a6x"]
+
+[resource]
+resource_name = "mat_kapton"
+albedo_color = Color(0.8980392, 0.56078434, 0.1764706, 1)
+albedo_texture = ExtResource("1_d11do")
+metallic = 0.7
+metallic_texture = ExtResource("2_juav2")
+roughness = 0.24
+roughness_texture = ExtResource("4_j4a6x")
+normal_enabled = true
+normal_scale = 1.1
+normal_texture = ExtResource("3_yql74")
+uv1_scale = Vector3(4.5, 4.5, 4.5)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 5.0

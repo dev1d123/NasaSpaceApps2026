@@ -23,14 +23,7 @@ var _orbit_timer := 0.0
 func setup(s: MissionSim) -> void:
 	sim = s
 	var env := WorldEnvironment.new()
-	var e := Environment.new()
-	e.background_mode = Environment.BG_COLOR
-	e.background_color = Color("#05070d")
-	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	e.ambient_light_color = Color("#3a4560")
-	e.ambient_light_energy = 0.35
-	e.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	env.environment = e
+	env.environment = SpacecraftModel.space_environment(Color("#05070d"), Color("#3a4560"), 0.35)
 	add_child(env)
 	sun = DirectionalLight3D.new()
 	sun.light_energy = 1.4
@@ -48,6 +41,7 @@ func setup(s: MissionSim) -> void:
 	link_mesh = _line_instance(UIKit.GOOD)
 	station_root = Node3D.new()
 	add_child(station_root)
+	_build_stations()
 	_stars()
 	cam = OrbitCamera.new()
 	add_child(cam)
@@ -177,7 +171,7 @@ func _process(delta: float) -> void:
 	if _orbit_timer <= 0.0:
 		_orbit_timer = 0.2
 		_draw_orbit()
-		_draw_stations()
+	_update_stations(o)
 	_draw_link(craft_pos, o)
 
 func _draw_orbit() -> void:
@@ -190,31 +184,48 @@ func _draw_orbit() -> void:
 		orbit_mesh.surface_add_vertex(Astro.to_godot(p, S))
 	orbit_mesh.surface_end()
 
-func _draw_stations() -> void:
-	for c in station_root.get_children():
-		c.queue_free()
-	var o := _origin_eci()
+## Estaciones terrenas (solo LEO): modelo de Blender ampliado a ~180 km de alto para
+## que se vea sobre el planeta, o un cubo si el modelo no está.
+const STATION_HEIGHT := 0.18
+var _station_nodes: Array = []
+
+func _build_stations() -> void:
 	for st in sim.station_points():
-		var p := Astro.to_godot(Astro.vsub(st["eci"], o), S)
-		var mi := MeshInstance3D.new()
-		var m := BoxMesh.new()
-		m.size = Vector3.ONE * 0.12
-		mi.mesh = m
-		var mat := StandardMaterial3D.new()
-		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		mat.albedo_color = UIKit.BAD if st["out"] else UIKit.GAME
-		mi.material_override = mat
-		mi.position = p * 1.01
-		station_root.add_child(mi)
+		var holder := Node3D.new()
+		station_root.add_child(holder)
+		var model_id := ModelLibrary.ground_model(st["id"])
+		var model := ModelLibrary.instance(model_id)
+		if model != null:
+			model.scale = Vector3.ONE * (STATION_HEIGHT / maxf(ModelLibrary.size(model_id).y, 0.01))
+			holder.add_child(model)
+		else:
+			var mi := MeshInstance3D.new()
+			var m := BoxMesh.new()
+			m.size = Vector3.ONE * 0.12
+			mi.mesh = m
+			holder.add_child(mi)
 		var l := Label3D.new()
 		l.text = st["nombre"]
 		l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		l.fixed_size = true
 		l.pixel_size = 0.0009
 		l.font_size = 24
-		l.modulate = UIKit.GAME
-		l.position = p * 1.04
+		l.no_depth_test = false
 		station_root.add_child(l)
+		_station_nodes.append({"holder": holder, "label": l})
+
+func _update_stations(o: PackedFloat64Array) -> void:
+	var pts := sim.station_points()
+	for i in mini(pts.size(), _station_nodes.size()):
+		var st: Dictionary = pts[i]
+		var p := Astro.to_godot(Astro.vsub(st["eci"], o), S)
+		var up := p.normalized()
+		var side := up.cross(Vector3.UP if absf(up.y) < 0.99 else Vector3.RIGHT).normalized()
+		var holder: Node3D = _station_nodes[i]["holder"]
+		holder.transform = Transform3D(Basis(side, up, side.cross(up)), p)
+		var l: Label3D = _station_nodes[i]["label"]
+		l.position = p + up * (STATION_HEIGHT + 0.12)
+		l.modulate = UIKit.BAD if st["out"] else UIKit.GAME
 
 func _draw_link(craft_pos: Vector3, o: PackedFloat64Array) -> void:
 	link_mesh.clear_surfaces()

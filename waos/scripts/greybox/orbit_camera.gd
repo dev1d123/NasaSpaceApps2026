@@ -40,6 +40,9 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	yaw += auto_rotate * delta
 	distance = lerpf(distance, _goal_distance, clampf(delta * 8.0, 0.0, 1.0))
+	# Plano cercano proporcional a la distancia: con near fijo de 0.01 y far de 20 000
+	# el buffer de profundidad no distingue piezas a milímetros y aparece z-fighting.
+	near = clampf(distance * 0.02, 0.001, 50.0)
 	var off := Vector3(cos(pitch) * sin(yaw), sin(pitch), cos(pitch) * cos(yaw)) * distance
 	global_position = target + off
 	look_at(target, Vector3.UP)

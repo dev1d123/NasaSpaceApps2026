@@ -1,0 +1,720 @@
+{
+  "cube3u": {
+    "file": "res://assets/models/buses/cube3u.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      0.1004,
+      0.1004,
+      0.3452
+    ],
+    "tris": 204,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas_marco",
+      "mat_kapton",
+      "mat_negro"
+    ]
+  },
+  "cube6u": {
+    "file": "res://assets/models/buses/cube6u.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      0.2264,
+      0.1384,
+      0.3808
+    ],
+    "tris": 252,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas_marco",
+      "mat_kapton",
+      "mat_negro"
+    ]
+  },
+  "cube12u": {
+    "file": "res://assets/models/buses/cube12u.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      0.2322,
+      0.2291,
+      0.3808
+    ],
+    "tris": 180,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_negro"
+    ]
+  },
+  "espa": {
+    "file": "res://assets/models/buses/espa.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      0.6,
+      0.6,
+      0.8
+    ],
+    "tris": 320,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_mli_oro",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "leostar2": {
+    "file": "res://assets/models/buses/leostar2.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      1.0024,
+      1.0024,
+      1.5
+    ],
+    "tris": 196,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_mli_oro",
+      "mat_mli_plata"
+    ]
+  },
+  "leostar3": {
+    "file": "res://assets/models/buses/leostar3.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      1.9,
+      1.9,
+      3.0
+    ],
+    "tris": 220,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_mli_oro",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "deep": {
+    "file": "res://assets/models/buses/deep.glb",
+    "categoria": "buses",
+    "bbox_m": [
+      1.6055,
+      1.6045,
+      2.4
+    ],
+    "tris": 272,
+    "sockets": [
+      "socket_back",
+      "socket_boom",
+      "socket_bottom",
+      "socket_panel_L",
+      "socket_panel_R",
+      "socket_payload_0",
+      "socket_payload_1",
+      "socket_payload_2",
+      "socket_payload_3",
+      "socket_sar",
+      "socket_top"
+    ],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_mli_oro",
+      "mat_mli_plata"
+    ]
+  },
+  "pan8": {
+    "file": "res://assets/models/panels/pan8.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      0.3,
+      0.0038,
+      0.044
+    ],
+    "tris": 84,
+    "sockets": [],
+    "materiales": [
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "pan30": {
+    "file": "res://assets/models/panels/pan30.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      0.34,
+      0.008,
+      0.157
+    ],
+    "tris": 384,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "pan90": {
+    "file": "res://assets/models/panels/pan90.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      0.34,
+      0.008,
+      0.438
+    ],
+    "tris": 1092,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "pan400": {
+    "file": "res://assets/models/panels/pan400.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      0.6,
+      0.09,
+      1.166
+    ],
+    "tris": 1160,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "pan1500": {
+    "file": "res://assets/models/panels/pan1500.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      1.0,
+      0.14,
+      2.694
+    ],
+    "tris": 2864,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "pan4500": {
+    "file": "res://assets/models/panels/pan4500.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      1.8,
+      0.2,
+      4.422
+    ],
+    "tris": 4544,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco"
+    ]
+  },
+  "rosa": {
+    "file": "res://assets/models/panels/rosa.glb",
+    "categoria": "panels",
+    "bbox_m": [
+      1.7,
+      0.12,
+      6.0224
+    ],
+    "tris": 2156,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas",
+      "mat_celdas_marco",
+      "mat_kapton"
+    ]
+  },
+  "coldgas": {
+    "file": "res://assets/models/propulsion/coldgas.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      0.1488,
+      0.088,
+      0.076
+    ],
+    "tris": 932,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_kapton",
+      "mat_mli_plata"
+    ]
+  },
+  "mono_cube": {
+    "file": "res://assets/models/propulsion/mono_cube.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      0.204,
+      0.204,
+      0.235
+    ],
+    "tris": 1012,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_mli_plata"
+    ]
+  },
+  "mono_small": {
+    "file": "res://assets/models/propulsion/mono_small.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      0.56,
+      0.56,
+      0.54
+    ],
+    "tris": 1696,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre"
+    ]
+  },
+  "mono_large": {
+    "file": "res://assets/models/propulsion/mono_large.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      1.8443,
+      0.9643,
+      0.95
+    ],
+    "tris": 2404,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_mli_plata"
+    ]
+  },
+  "biprop": {
+    "file": "res://assets/models/propulsion/biprop.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      2.2485,
+      1.55,
+      1.26
+    ],
+    "tris": 2220,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_mli_oro",
+      "mat_mli_plata"
+    ]
+  },
+  "hall": {
+    "file": "res://assets/models/propulsion/hall.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      0.4,
+      0.4327,
+      0.36
+    ],
+    "tris": 1196,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_kapton",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "nextc": {
+    "file": "res://assets/models/propulsion/nextc.glb",
+    "categoria": "propulsion",
+    "bbox_m": [
+      0.8,
+      0.8803,
+      0.7151
+    ],
+    "tris": 1844,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_cobre",
+      "mat_kapton",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "uhf": {
+    "file": "res://assets/models/comms/uhf.glb",
+    "categoria": "comms",
+    "bbox_m": [
+      0.44,
+      0.44,
+      0.016
+    ],
+    "tris": 184,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas_marco",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "sband": {
+    "file": "res://assets/models/comms/sband.glb",
+    "categoria": "comms",
+    "bbox_m": [
+      0.08,
+      0.08,
+      0.0052
+    ],
+    "tris": 244,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre"
+    ]
+  },
+  "xpatch": {
+    "file": "res://assets/models/comms/xpatch.glb",
+    "categoria": "comms",
+    "bbox_m": [
+      0.14,
+      0.07,
+      0.007
+    ],
+    "tris": 148,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre"
+    ]
+  },
+  "xhga": {
+    "file": "res://assets/models/comms/xhga.glb",
+    "categoria": "comms",
+    "bbox_m": [
+      0.6039,
+      0.6039,
+      0.54
+    ],
+    "tris": 1144,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre"
+    ]
+  },
+  "ka": {
+    "file": "res://assets/models/comms/ka.glb",
+    "categoria": "comms",
+    "bbox_m": [
+      0.754,
+      0.754,
+      1.615
+    ],
+    "tris": 1048,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre"
+    ]
+  },
+  "cubecam": {
+    "file": "res://assets/models/instruments/cubecam.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.1,
+      0.1,
+      0.1518
+    ],
+    "tris": 312,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_lente",
+      "mat_negro"
+    ]
+  },
+  "cam": {
+    "file": "res://assets/models/instruments/cam.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.7,
+      0.35,
+      0.7433
+    ],
+    "tris": 1072,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_lente",
+      "mat_mli_oro",
+      "mat_negro"
+    ]
+  },
+  "ir": {
+    "file": "res://assets/models/instruments/ir.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.4925,
+      0.3,
+      0.3524
+    ],
+    "tris": 220,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_lente",
+      "mat_mli_oro",
+      "mat_mli_plata",
+      "mat_negro"
+    ]
+  },
+  "neut": {
+    "file": "res://assets/models/instruments/neut.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.4917,
+      0.4363,
+      0.4525
+    ],
+    "tris": 1024,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_negro"
+    ]
+  },
+  "uv": {
+    "file": "res://assets/models/instruments/uv.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.17,
+      0.17,
+      0.3515
+    ],
+    "tris": 92,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_lente",
+      "mat_mli_oro",
+      "mat_negro"
+    ]
+  },
+  "rad": {
+    "file": "res://assets/models/instruments/rad.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.2,
+      0.2,
+      0.2518
+    ],
+    "tris": 456,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_lente",
+      "mat_mli_oro",
+      "mat_negro"
+    ]
+  },
+  "sar": {
+    "file": "res://assets/models/instruments/sar.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.7,
+      3.0,
+      0.3025
+    ],
+    "tris": 240,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_negro"
+    ]
+  },
+  "mag": {
+    "file": "res://assets/models/instruments/mag.glb",
+    "categoria": "instruments",
+    "bbox_m": [
+      0.0975,
+      0.08,
+      2.1
+    ],
+    "tris": 396,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_celdas_marco",
+      "mat_kapton",
+      "mat_mli_oro"
+    ]
+  },
+  "dsn70": {
+    "file": "res://assets/models/ground/dsn70.glb",
+    "categoria": "ground",
+    "bbox_m": [
+      70.4,
+      66.428,
+      51.9325
+    ],
+    "tris": 2620,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_negro"
+    ]
+  },
+  "nsn11": {
+    "file": "res://assets/models/ground/nsn11.glb",
+    "categoria": "ground",
+    "bbox_m": [
+      11.1,
+      10.4629,
+      10.2662
+    ],
+    "tris": 1624,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre",
+      "mat_negro"
+    ]
+  },
+  "yagi_uni": {
+    "file": "res://assets/models/ground/yagi_uni.glb",
+    "categoria": "ground",
+    "bbox_m": [
+      3.6024,
+      3.8538,
+      7.6853
+    ],
+    "tris": 644,
+    "sockets": [],
+    "materiales": [
+      "mat_aluminio",
+      "mat_blanco",
+      "mat_cobre",
+      "mat_negro"
+    ]
+  },
+  "person_ref": {
+    "file": "res://assets/models/ref/person_ref.glb",
+    "categoria": "ref",
+    "bbox_m": [
+      0.5579,
+      0.317,
+      1.7997
+    ],
+    "tris": 2428,
+    "sockets": [],
+    "materiales": [
+      "mat_blanco",
+      "mat_kapton",
+      "mat_lente",
+      "mat_negro"
+    ]
+  }
+}

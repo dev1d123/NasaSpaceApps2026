@@ -1,7 +1,8 @@
 class_name SpacecraftModel
 extends Node3D
-## Nave en greybox armada con primitivas a partir del diseño. Medidas en metros,
-## aproximadas a la clase real de cada componente para que la escala enseñe algo.
+## Nave armada a partir del diseño. Si están los modelos de Blender (ModelLibrary),
+## cada componente se encaja en el socket_* de su bus; si falta alguno, se usa el
+## greybox de primitivas. Medidas en metros, a escala real.
 
 const BUS_SIZE := {
 	"cube3u": Vector3(0.10, 0.34, 0.10), "cube6u": Vector3(0.22, 0.34, 0.10), "cube12u": Vector3(0.22, 0.34, 0.22),
@@ -53,10 +54,111 @@ func _sphere(r: float, pos: Vector3, c: Color) -> MeshInstance3D:
 	m.height = r * 2.0
 	return _part(m, pos, c)
 
+var using_models := false
+
 func build(design: Dictionary) -> void:
 	for c in get_children():
+		remove_child(c)
 		c.queue_free()
 	bounds = AABB()
+	using_models = _models_complete(design)
+	if using_models:
+		_build_models(design)
+	else:
+		_build_greybox(design)
+	bounds = _compute_bounds()
+
+# ---------------- Modelos de Blender ----------------
+const TOP_COMMS := ["uhf", "xhga", "ka"]
+
+func _models_complete(design: Dictionary) -> bool:
+	var ids: Array = [design["bus"], design["pan"], design["com"]]
+	if design["prop"] != "none":
+		ids.append(design["prop"])
+	ids.append_array(design["ins"])
+	for id in ids:
+		if not ModelLibrary.has(id):
+			return false
+	return true
+
+func _build_models(design: Dictionary) -> void:
+	var bus := ModelLibrary.instance(design["bus"])
+	bus.name = "Bus"
+	add_child(bus)
+	var bus_h := ModelLibrary.size(design["bus"]).y
+	for s in ["socket_panel_L", "socket_panel_R"]:
+		_attach(design["pan"], _socket(bus, s))
+	if design["prop"] != "none":
+		_attach(design["prop"], _socket(bus, "socket_bottom"))
+	_attach(design["com"], _socket(bus, "socket_top" if TOP_COMMS.has(design["com"]) else "socket_back"))
+	var k := 0
+	for id in design["ins"]:
+		match id:
+			"sar":
+				_attach(id, _socket(bus, "socket_sar"))
+			"mag":
+				_attach(id, _socket(bus, "socket_boom"))
+			_:
+				var node := _attach(id, _socket(bus, "socket_payload_%d" % (k % 4)))
+				# Más de 4 instrumentos: segunda fila, más arriba en la cara nadir.
+				if k >= 4 and node != null:
+					var sxf := _relative(node.get_parent(), self)
+					node.position = sxf.affine_inverse() * (sxf.origin + Vector3(0, bus_h * 0.3, 0))
+				k += 1
+
+func _socket(bus: Node, socket_name: String) -> Node3D:
+	return bus.find_child(socket_name, true, false) as Node3D
+
+func _attach(id: String, socket: Node3D) -> Node3D:
+	if socket == null:
+		push_warning("Falta el socket para " + id)
+		return null
+	var node := ModelLibrary.instance(id)
+	if node != null:
+		socket.add_child(node)
+	return node
+
+## Transformación de `node` en el espacio de `root` (sin depender del árbol de escena).
+static func _relative(node: Node, root: Node) -> Transform3D:
+	var xf := Transform3D.IDENTITY
+	var n := node
+	while n != null and n != root:
+		if n is Node3D:
+			xf = (n as Node3D).transform * xf
+		n = n.get_parent()
+	return xf
+
+func _compute_bounds() -> AABB:
+	var out := AABB()
+	var first := true
+	for mi in find_children("*", "MeshInstance3D", true, false):
+		var ab := _relative(mi, self) * (mi as MeshInstance3D).get_aabb()
+		out = ab if first else out.merge(ab)
+		first = false
+	return out
+
+## Entorno con reflejos: sin cielo, los metales (MLI, aluminio) se ven negros.
+static func space_environment(bg: Color, ambient: Color, ambient_energy: float) -> Environment:
+	var e := Environment.new()
+	e.background_mode = Environment.BG_COLOR
+	e.background_color = bg
+	var sky := Sky.new()
+	var sm := ProceduralSkyMaterial.new()
+	sm.sky_top_color = Color("#5a6a8c")
+	sm.sky_horizon_color = Color("#8a93a8")
+	sm.ground_bottom_color = Color("#20263a")
+	sm.ground_horizon_color = Color("#5a6278")
+	sky.sky_material = sm
+	e.sky = sky
+	e.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
+	e.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	e.ambient_light_color = ambient
+	e.ambient_light_energy = ambient_energy
+	e.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	return e
+
+# ---------------- Greybox de respaldo ----------------
+func _build_greybox(design: Dictionary) -> void:
 	var bus_id: String = design["bus"]
 	var s: Vector3 = BUS_SIZE.get(bus_id, Vector3.ONE)
 	var grey := Color("#b9bec8")
