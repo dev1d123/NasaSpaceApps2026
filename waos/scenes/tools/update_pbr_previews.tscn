@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/update_pbr_previews.gd" id="1"]
+
+[node name="UpdatePBRPreviews" type="Node"]
+script = ExtResource("1")
