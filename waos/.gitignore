@@ -1,3 +1,16 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Respaldos automáticos de Blender
+*.blend1
+
+# Zips de texturas de ambientCG (las carpetas extraídas sí van al repo)
+art/textures/*.zip
+
+# Salida del export web (se despliega a Vercel, no se versiona)
+build/
+.vercel/
+
+# Archivos temporales
+scratch_artifact.*
