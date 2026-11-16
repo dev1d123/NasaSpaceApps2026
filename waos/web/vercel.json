@@ -1,16 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": false,
   "headers": [
     {
-      "source": "/(.*)\.(wasm|pck)",
+      "source": "/index.wasm",
       "headers": [
+        { "key": "Content-Type", "value": "application/wasm" },
         { "key": "Cache-Control", "value": "public, max-age=3600" }
       ]
     },
     {
-      "source": "/(.*)\.wasm",
-      "headers": [{ "key": "Content-Type", "value": "application/wasm" }]
+      "source": "/index.pck",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
     }
   ]
 }
