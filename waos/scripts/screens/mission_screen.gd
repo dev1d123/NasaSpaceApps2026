@@ -1,17 +1,21 @@
 extends Node
-## CML 4 · Misión en curso: el diseño está congelado y se vuela. Simulación acelerada
-## con eventos que piden decisiones al rol responsable.
+## CML 4 · Centro de Operaciones de Misión y Telemetría de Vuelo en Tiempo Real.
+## Consola de teleoperaciones estilo JPL: reloj MET digital, indicadores de subsistemas
+## con código de color por rol, enlace con estaciones terrestres y alarmas de vuelo.
 
 const WARPS := [
-	{"label": "⏸", "x": 0.0, "tip": "Pausa"},
+	{"label": "❚❚", "x": 0.0, "tip": "Pausa"},
 	{"label": "1×", "x": 1.0, "tip": "Tiempo real"},
 	{"label": "1m", "x": 60.0, "tip": "1 minuto por segundo"},
 	{"label": "10m", "x": 600.0, "tip": "10 minutos por segundo"},
 	{"label": "1h", "x": 3600.0, "tip": "1 hora por segundo"},
 	{"label": "6h", "x": 21600.0, "tip": "6 horas por segundo"},
 	{"label": "1d", "x": 86400.0, "tip": "1 día por segundo"},
-	{"label": "MÁX", "x": -1.0, "tip": "Tan rápido como lo permita el equipo"},
+	{"label": "MÁX", "x": -1.0, "tip": "Velocidad máxima de cómputo"},
 ]
+
+const UISound = preload("res://scripts/ui/ui_sound.gd")
+const UIParticles = preload("res://scripts/ui/ui_particles.gd")
 
 var main: Node
 var sim: MissionSim
@@ -29,6 +33,7 @@ var _modal: Control
 var _hud_timer := 0.0
 var _speed_acc := 0.0
 var _speed_t := 0.0
+var _in_alarm := false
 
 func _ready() -> void:
 	sim = MissionSim.new()
@@ -36,6 +41,7 @@ func _ready() -> void:
 	view = SpaceView.new()
 	add_child(view)
 	view.setup(sim)
+	
 	var ui := CanvasLayer.new()
 	add_child(ui)
 	_root = Control.new()
@@ -43,73 +49,101 @@ func _ready() -> void:
 	_root.theme = UIKit.theme()
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui.add_child(_root)
-	var page := UIKit.vbox(10)
+	
+	var page := UIKit.vbox(8)
 	page.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var wrap := UIKit.margin(page, 12)
 	wrap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	wrap.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_root.add_child(wrap)
+	
 	page.add_child(_top_bar())
+	
 	var body := UIKit.hbox(10)
 	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	page.add_child(body)
+	
 	body.add_child(_left_panels())
+	
+	# Espacio central transparente para el visor 3D
 	var mid := Control.new()
 	mid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_child(mid)
+	
 	body.add_child(_log_panel())
+	
 	_modal = Control.new()
 	_modal.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_modal.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_modal)
+	
 	for e in sim.logs:
 		_on_log(e)
 	sim.log_added.connect(_on_log)
+	
 	_set_warp(warp)
 	_refresh_hud()
 
-# ---------------- Barra superior ----------------
+# ---------------- Barra Superior de Teleoperaciones ----------------
 func _top_bar() -> Control:
-	var p := UIKit.panel(Color(UIKit.SURFACE, 0.92))
+	var p := PanelContainer.new()
+	p.add_theme_stylebox_override("panel", UIKit.box(UIKit.SURFACE_GLASS, UIKit.LINE, 6, 10))
 	var row := UIKit.hbox(14)
 	p.add_child(row)
-	var v := UIKit.vbox(0)
-	v.add_child(UIKit.eyebrow("CML 4 · Misión en curso", UIKit.ACCENT))
-	var name_l := UIKit.label(GameData.scenario(GameState.scn_id)["nombre"], 17)
+	
+	var v := UIKit.vbox(1)
+	v.add_child(UIKit.eyebrow("Centro de Operaciones de Vuelo · CML 4", UIKit.ACCENT))
+	var name_l := UIKit.label(GameData.scenario(GameState.scn_id)["nombre"], 18, UIKit.INK_BRIGHT)
+	name_l.add_theme_font_override("font", UIKit.font_title())
 	name_l.clip_text = true
-	name_l.custom_minimum_size.x = 200
+	name_l.custom_minimum_size.x = 220
 	name_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	v.add_child(name_l)
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(v)
-	var tv := UIKit.vbox(0)
-	_time_l = UIKit.label("", 20)
-	_phase_l = UIKit.label("", 12, UIKit.MUTED)
+	
+	# Reloj Digital MET (Mission Elapsed Time)
+	var tv := UIKit.vbox(1)
+	_time_l = UIKit.label("", 19, UIKit.INK_BRIGHT, false, true)
+	_phase_l = UIKit.label("", 11, UIKit.MUTED)
 	tv.add_child(_time_l)
 	tv.add_child(_phase_l)
 	row.add_child(tv)
-	_warp_row = UIKit.hbox(4)
+	
+	# Selector de Compresión Temporal (Warp)
+	_warp_row = UIKit.hbox(3)
 	for w in WARPS:
 		var b := UIKit.button(w["label"])
+		b.custom_minimum_size = Vector2(40, 34)
 		b.toggle_mode = true
 		b.tooltip_text = w["tip"]
-		b.pressed.connect(_set_warp.bind(w["x"]))
+		b.pressed.connect(func():
+			_set_warp(w["x"])
+			UISound.play_toggle(w["x"] > 0.0))
 		_warp_row.add_child(b)
 	row.add_child(_warp_row)
-	_speed_l = UIKit.label("", 12, UIKit.MUTED)
-	_speed_l.custom_minimum_size.x = 84
+	
+	_speed_l = UIKit.label("", 11, UIKit.MUTED, false, true)
+	_speed_l.custom_minimum_size.x = 88
 	row.add_child(_speed_l)
-	var focus := UIKit.button("Ver nave")
-	focus.tooltip_text = "Alterna la cámara entre la órbita completa y la nave"
+	
+	var focus := UIKit.button("Ver Nave")
+	focus.custom_minimum_size = Vector2(96, 34)
+	focus.tooltip_text = "Alterna la cámara entre la trayectoria orbital global y la nave espacial"
 	focus.pressed.connect(func():
 		view.toggle_focus()
-		focus.text = "Ver órbita" if view.focus_craft else "Ver nave")
+		focus.text = "Ver Órbita" if view.focus_craft else "Ver Nave")
 	row.add_child(focus)
+	
 	var abort := UIKit.button("Abortar")
-	abort.tooltip_text = "Vuelve a CML 3 sin terminar el vuelo"
-	abort.pressed.connect(func(): main.goto_design())
+	abort.custom_minimum_size = Vector2(80, 34)
+	abort.tooltip_text = "Regresa a la mesa de diseño CML 3 sin concluir el vuelo"
+	abort.pressed.connect(func():
+		if main and main.has_method("trigger_alarm"):
+			main.trigger_alarm(false)
+		main.goto_design())
 	row.add_child(abort)
 	return p
 
@@ -118,10 +152,12 @@ func _set_warp(x: float) -> void:
 	for i in WARPS.size():
 		(_warp_row.get_child(i) as Button).button_pressed = WARPS[i]["x"] == x
 
-# ---------------- Paneles por rol ----------------
+# ---------------- Paneles de Telemetría por Rol ----------------
 func _role_panel(role: String) -> VBoxContainer:
-	var p := UIKit.panel(Color(UIKit.SURFACE, 0.92), GameState.role_color(role).darkened(0.3), 10)
-	var v := UIKit.vbox(6)
+	var col: Color = GameState.role_color(role)
+	var p := PanelContainer.new()
+	p.add_theme_stylebox_override("panel", UIKit.card_box(UIKit.SURFACE_GLASS, col, 6, 10))
+	var v := UIKit.vbox(5)
 	p.add_child(v)
 	v.add_child(UIKit.role_tag(role))
 	_hud["panel_" + role] = p
@@ -130,87 +166,113 @@ func _role_panel(role: String) -> VBoxContainer:
 func _left_panels() -> Control:
 	var col := UIKit.vbox(8)
 	var s := UIKit.scroll(col)
-	s.custom_minimum_size.x = 360
+	s.custom_minimum_size.x = 380
 	s.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	# Lanzamiento
+	
+	# Subsistema: Lanzamiento / Dinámica Orbital
 	var l := _role_panel("launch")
-	_hud["orbit"] = UIKit.label("", 13, UIKit.INK, true)
-	_hud["dv"] = UIKit.meter("Δv restante")
+	_hud["orbit"] = UIKit.label("", 12, UIKit.INK, true, true)
+	_hud["dv"] = UIKit.meter("Δv y Propelente Restante")
 	l.add_child(_hud["orbit"])
 	l.add_child(_hud["dv"]["root"])
 	col.add_child(_hud["panel_launch"])
-	# Sistemas
+	
+	# Subsistema: Sistemas y Energía
 	var sy := _role_panel("space")
-	_hud["bat"] = UIKit.meter("Batería")
-	_hud["power"] = UIKit.label("", 13)
-	_hud["state"] = UIKit.label("", 13)
+	_hud["bat"] = UIKit.meter("Batería de a Bordo (Wh)")
+	_hud["power"] = UIKit.label("", 12, UIKit.INK, true, true)
+	_hud["state"] = UIKit.label("", 12, UIKit.GOOD, true)
 	sy.add_child(_hud["bat"]["root"])
 	sy.add_child(_hud["power"])
 	sy.add_child(_hud["state"])
 	col.add_child(_hud["panel_space"])
-	# Comunicaciones
+	
+	# Subsistema: Comunicaciones Terrestres
 	var g := _role_panel("ground")
-	_hud["link"] = UIKit.label("", 13, UIKit.INK, true)
-	_hud["mem"] = UIKit.meter("Memoria a bordo")
-	_hud["down"] = UIKit.label("", 13)
+	_hud["link"] = UIKit.label("", 12, UIKit.INK, true)
+	_hud["mem"] = UIKit.meter("Buffer de Memoria SSR")
+	_hud["down"] = UIKit.label("", 12, UIKit.INK, false, true)
 	g.add_child(_hud["link"])
 	g.add_child(_hud["mem"]["root"])
 	g.add_child(_hud["down"])
 	col.add_child(_hud["panel_ground"])
-	# Ciencia
+	
+	# Subsistema: Carga Útil y Ciencia
 	var u := _role_panel("user")
-	_hud["sp"] = UIKit.meter("Ciencia en tierra / meta")
+	_hud["sp"] = UIKit.meter("Ciencia en Tierra / Meta SP")
 	u.add_child(_hud["sp"]["root"])
+	
+	var ins_box := UIKit.vbox(2)
+	u.add_child(ins_box)
 	for id in sim.design["ins"]:
 		var cb := CheckButton.new()
 		cb.text = GameData.by_id("instrumentos", id)["nombre"]
 		cb.button_pressed = true
-		cb.add_theme_font_size_override("font_size", 13)
-		cb.toggled.connect(func(on): sim.ins_on[id] = on)
+		cb.add_theme_font_size_override("font_size", 12)
+		cb.toggled.connect(func(on):
+			sim.ins_on[id] = on
+			UISound.play_toggle(on))
 		_ins_checks[id] = cb
-		u.add_child(cb)
-	var dl := UIKit.label("", 12, UIKit.MUTED)
+		ins_box.add_child(cb)
+		
+	var dl := UIKit.label("", 11, UIKit.MUTED, false, true)
 	var ds := HSlider.new()
 	ds.min_value = 5
 	ds.max_value = 100
 	ds.step = 5
 	ds.value = sim.duty * 100.0
-	var upd := func(val: float): dl.text = "Ciclo de trabajo: %d %%" % int(val)
+	var upd := func(val: float): dl.text = "Ciclo de trabajo activo: %d %%" % int(val)
 	upd.call(ds.value)
 	ds.value_changed.connect(func(val):
 		upd.call(val)
 		sim.duty = val / 100.0)
 	u.add_child(dl)
 	u.add_child(ds)
+	
 	var gate := CheckBox.new()
-	gate.text = "Instrumentos en espera durante eclipses"
-	gate.add_theme_font_size_override("font_size", 13)
-	gate.toggled.connect(func(on): sim.eclipse_gate = on)
+	gate.text = "Modo reposo durante eclipses (ahorro de batería)"
+	gate.add_theme_font_size_override("font_size", 11)
+	gate.toggled.connect(func(on):
+		sim.eclipse_gate = on
+		UISound.play_toggle(on))
 	_hud["gate"] = gate
 	u.add_child(gate)
 	col.add_child(_hud["panel_user"])
 	return s
 
+# ---------------- Bitácora de Misión ----------------
 func _log_panel() -> Control:
-	var p := UIKit.panel(Color(UIKit.SURFACE, 0.92))
-	p.custom_minimum_size.x = 360
+	var p := PanelContainer.new()
+	p.add_theme_stylebox_override("panel", UIKit.box(UIKit.SURFACE_GLASS, UIKit.LINE, 6, 10))
+	p.custom_minimum_size.x = 380
 	var v := UIKit.vbox(6)
 	p.add_child(v)
-	v.add_child(UIKit.eyebrow("Bitácora de misión"))
+	v.add_child(UIKit.eyebrow("Bitácora de Telemetría"))
+	
 	_log = RichTextLabel.new()
 	_log.bbcode_enabled = true
 	_log.scroll_following = true
 	_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_log.add_theme_font_size_override("normal_font_size", 13)
-	_log.add_theme_font_size_override("bold_font_size", 13)
+	_log.add_theme_font_override("normal_font", UIKit.font_mono())
+	_log.add_theme_font_size_override("normal_font_size", 11)
+	_log.add_theme_font_size_override("bold_font_size", 11)
 	v.add_child(_log)
 	return p
 
 func _on_log(e: Dictionary) -> void:
+	var kind: String = e.get("kind", "")
+	if kind == "bad":
+		UISound.play_alert()
+	elif kind == "warn":
+		UISound.play_warning()
+	elif kind == "good":
+		UISound.play_quindar()
+	elif kind == "event":
+		UISound.play_relay()
 	var col: Color = {"info": UIKit.MUTED, "good": UIKit.GOOD, "warn": UIKit.WARN, "bad": UIKit.BAD, "event": UIKit.ACCENT, "decision": UIKit.REAL}.get(e["kind"], UIKit.INK)
 	_log.append_text("[color=#%s]%s[/color]  [color=#%s]%s[/color]\n" % [UIKit.MUTED.to_html(false), "D%.1f" % (e["t"] / 86400.0), (col as Color).to_html(false), e["text"]])
 
-# ---------------- Bucle ----------------
+# ---------------- Bucle Principal de Simulación ----------------
 func _process(delta: float) -> void:
 	if sim.finished:
 		if _modal.get_child_count() == 0:
@@ -223,12 +285,14 @@ func _process(delta: float) -> void:
 		var budget := 12000.0 if warp > 0.0 else 22000.0
 		var done := sim.advance(want, budget)
 		_speed_acc += done
+	
 	_speed_t += delta
 	if _speed_t >= 0.5:
 		var rate := _speed_acc / _speed_t
 		_speed_l.text = "≈ %s" % _rate_text(rate)
 		_speed_acc = 0.0
 		_speed_t = 0.0
+		
 	_hud_timer -= delta
 	if _hud_timer <= 0.0:
 		_hud_timer = 0.1
@@ -247,62 +311,82 @@ func _rate_text(r: float) -> String:
 
 func _refresh_hud() -> void:
 	var total := sim.t_end / 86400.0
-	_time_l.text = UIKit.fmt_time(sim.t) + " / %d días" % int(total)
-	var ph: String = {"crucero": "Crucero a la Luna", "ciencia": "Operaciones científicas", "fin": "Misión terminada"}.get(sim.phase, sim.phase)
-	_phase_l.text = "%s · %s" % [ph, {"leo": "órbita terrestre baja", "llo": "órbita lunar baja polar", "nrho": "NRHO 9:2"}[sim.regime]]
-	# Lanzamiento
+	_time_l.text = UIKit.fmt_met(sim.t) + " · META: %d d" % int(total)
+	
+	var ph: String = {"crucero": "Crucero a la Luna", "ciencia": "Operaciones Científicas Nominales", "fin": "Misión Finalizada"}.get(sim.phase, sim.phase)
+	_phase_l.text = "%s · %s" % [ph.to_upper(), {"leo": "Órbita Terrestre Baja (LEO)", "llo": "Órbita Lunar Baja Polar", "nrho": "Órbita NRHO Lunar 9:2"}.get(sim.regime, sim.regime)]
+	
+	# Dinámica Orbital y Propelente
 	var orb := ""
 	match sim.regime:
 		"leo":
-			orb = "Altitud %.1f km (objetivo %.0f km) · inclinación heliosíncrona" % [sim.altitude, sim.alt_target]
+			orb = "Altitud: %.1f km (Objetivo %.0f km) · Inclinación heliosíncrona" % [sim.altitude, sim.alt_target]
 		"llo":
 			if sim.phase == "crucero":
-				orb = "Crucero: %s km de la Tierra · inserción en %.1f días" % [_k(sim.altitude), (sim.cruise_end - sim.t) / 86400.0]
+				orb = "Crucero: %s km de la Tierra · Inserción lunar en %.1f días" % [_k(sim.altitude), (sim.cruise_end - sim.t) / 86400.0]
 			else:
-				orb = "Altitud %.1f km · caída del periluna por mascones %.1f km · próximo mantenimiento en %.0f días" % [sim.altitude, sim.maint["drop_km"], (sim.maint["next"] - sim.t) / 86400.0]
+				orb = "Altitud: %.1f km · Descenso por mascones: %.1f km · Mantenimiento en %.0f d" % [sim.altitude, sim.maint["drop_km"], (sim.maint["next"] - sim.t) / 86400.0]
 		"nrho":
 			if sim.phase == "crucero":
-				orb = "Crucero: %s km de la Tierra · inserción en %.1f días" % [_k(sim.altitude), (sim.cruise_end - sim.t) / 86400.0]
+				orb = "Crucero: %s km de la Tierra · Inserción en %.1f días" % [_k(sim.altitude), (sim.cruise_end - sim.t) / 86400.0]
 			else:
-				orb = "Distancia a la Luna %s km · error de órbita %.1f km (se duplica cada ≈7 días sin mantenimiento)" % [_k(sim.altitude + Astro.R_M), sim.maint["err_km"]]
+				orb = "Distancia lunar: %s km · Error orbital: %.1f km" % [_k(sim.altitude + Astro.R_M), sim.maint["err_km"]]
 	_hud["orbit"].text = orb
+	
 	var dvl := sim.dv_left()
 	var dv0 := float(sim.ev["dv"])
-	UIKit.set_meter(_hud["dv"], (dvl / dv0) if dv0 > 0 else 0.0, "%.0f m/s · %.2f kg" % [dvl, sim.prop_kg], UIKit.GOOD if dvl > 50 or dv0 == 0 else UIKit.WARN)
-	# Sistemas
+	UIKit.set_meter(_hud["dv"], (dvl / dv0) if dv0 > 0 else 0.0, "%.0f m/s (%.2f kg)" % [dvl, sim.prop_kg], UIKit.GOOD if dvl > 50 or dv0 == 0 else UIKit.WARN)
+	
+	# Energía y Baterías
 	var frac := sim.energy / maxf(sim.cap_wh, 0.001)
 	var dod := sim.dod_override if sim.dod_override > 0.0 else sim.dod_max
 	UIKit.set_meter(_hud["bat"], frac, "%.0f / %.0f Wh" % [sim.energy, sim.cap_wh], UIKit.GOOD if frac > 1.0 - dod + 0.05 else UIKit.WARN if frac > 1.0 - dod else UIKit.BAD)
-	var sun_txt := "al Sol" if sim.sun_f > 0.99 else ("en eclipse" if sim.sun_f < 0.01 else "penumbra %.0f %%" % (sim.sun_f * 100.0))
-	_hud["power"].text = "Generación %.0f W · carga %.0f W · %s" % [sim.gen_w, sim.load_w, sun_txt]
-	var st := "Normal"
+	
+	var sun_txt := "☀ Al Sol" if sim.sun_f > 0.99 else ("● En eclipse" if sim.sun_f < 0.01 else "◐ Penumbra %.0f %%" % (sim.sun_f * 100.0))
+	_hud["power"].text = "Generación %.0f W · Consumo %.0f W · %s" % [sim.gen_w, sim.load_w, sun_txt]
+	
+	var st := "NOMINAL"
 	var st_col := UIKit.GOOD
+	var is_alarm := false
 	if sim.in_safe():
-		st = "MODO SEGURO: " + sim.safe_reason
+		st = "ALERTA MODO SEGURO: " + sim.safe_reason.to_upper()
 		st_col = UIKit.BAD
+		is_alarm = true
 	elif sim.shed:
-		st = "Corte de carga: instrumentos en espera"
+		st = "PRECAUCIÓN: Corte de carga instrumental activo"
 		st_col = UIKit.WARN
-	_hud["state"].text = "Estado: %s · capacidad %.0f %%" % [st, sim.cap_wh / sim.cap_wh0 * 100.0]
+		
+	if is_alarm != _in_alarm:
+		_in_alarm = is_alarm
+		if main and main.has_method("trigger_alarm"):
+			main.trigger_alarm(is_alarm)
+		if is_alarm:
+			UISound.play_warning()
+			
+	_hud["state"].text = "Estado: %s · Salud celda %.0f %%" % [st, sim.cap_wh / sim.cap_wh0 * 100.0]
 	_hud["state"].add_theme_color_override("font_color", st_col)
-	# Comunicaciones
+	
+	# Comunicaciones y Enlace
 	if sim.in_contact:
-		_hud["link"].text = "● En contacto con %s · %s" % [sim.contact_station, _mbps(sim.link_mbps)]
+		_hud["link"].text = "● EN CONTACTO: %s · %s" % [sim.contact_station.to_upper(), _mbps(sim.link_mbps)]
 		_hud["link"].add_theme_color_override("font_color", UIKit.GOOD)
 	else:
-		_hud["link"].text = "○ Sin contacto" + (" · antena sin desplegar" if sim.mod_active("antenna_stowed") else "")
+		_hud["link"].text = "○ FUERA DE COBERTURA TERRESTRE" + (" (Antena no desplegada)" if sim.mod_active("antenna_stowed") else "")
 		_hud["link"].add_theme_color_override("font_color", UIKit.MUTED)
+		
 	var mu := sim.mem_used() / maxf(sim.mem_max, 1.0)
 	UIKit.set_meter(_hud["mem"], mu, "%s / %s" % [DesignEval.fmt_mb(sim.mem_used()), DesignEval.fmt_mb(sim.mem_max)], UIKit.GOOD if mu < 0.7 else UIKit.WARN if mu < 0.98 else UIKit.BAD)
-	_hud["down"].text = "En tierra %s · perdidos %s" % [DesignEval.fmt_mb(sim.mb_down), DesignEval.fmt_mb(sim.ledger["mb_perdidos"])]
-	# Ciencia
+	_hud["down"].text = "Descargados: %s · Sobrescritos: %s" % [DesignEval.fmt_mb(sim.mb_down), DesignEval.fmt_mb(sim.ledger["mb_perdidos"])]
+	
+	# Ciencia y Puntos SP
 	var meta := float(sim.sc["meta_sp"])
-	UIKit.set_meter(_hud["sp"], sim.sp / meta, "%.0f / %.0f pts" % [sim.sp, meta], UIKit.GOOD if sim.sp >= meta else UIKit.REAL)
+	UIKit.set_meter(_hud["sp"], sim.sp / meta, "%.0f / %.0f SP" % [sim.sp, meta], UIKit.GOOD if sim.sp >= meta else UIKit.REAL)
+	
 	for id in _ins_checks:
 		var cb: CheckButton = _ins_checks[id]
 		var active := sim._instrument_active(id)
-		cb.add_theme_color_override("font_color", UIKit.INK if active else UIKit.MUTED)
-		cb.add_theme_color_override("font_pressed_color", UIKit.INK if active else UIKit.MUTED)
+		cb.add_theme_color_override("font_color", UIKit.INK_BRIGHT if active else UIKit.MUTED)
+		cb.add_theme_color_override("font_pressed_color", UIKit.INK_BRIGHT if active else UIKit.MUTED)
 	(_hud["gate"] as CheckBox).set_pressed_no_signal(sim.eclipse_gate)
 
 func _k(km: float) -> String:
@@ -311,16 +395,17 @@ func _k(km: float) -> String:
 func _mbps(r: float) -> String:
 	return "%.0f Mbps" % r if r >= 1.0 else "%.1f kbps" % (r * 1000.0)
 
-# ---------------- Modales ----------------
+# ---------------- Ventanas Modales de Eventos y Fin de Vuelo ----------------
 func _modal_panel(border: Color) -> VBoxContainer:
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.55)
+	dim.color = Color(0, 0, 0, 0.65)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_modal.add_child(dim)
 	var center := CenterContainer.new()
 	center.set_anchors_preset(Control.PRESET_FULL_RECT)
 	dim.add_child(center)
-	var p := UIKit.panel(UIKit.SURFACE, border, 22)
+	var p := PanelContainer.new()
+	p.add_theme_stylebox_override("panel", UIKit.card_box(UIKit.SURFACE, border, 8, 22))
 	p.custom_minimum_size.x = 640
 	center.add_child(p)
 	var v := UIKit.vbox(10)
@@ -332,25 +417,32 @@ func _close_modal() -> void:
 		c.queue_free()
 
 func _show_event() -> void:
+	UISound.play_alert()
 	var rec := sim.pending_event
 	var v := _modal_panel(UIKit.ACCENT)
+	
 	var top := UIKit.hbox(8)
-	top.add_child(UIKit.eyebrow("Evento · %s" % UIKit.fmt_time(sim.t), UIKit.ACCENT))
+	top.add_child(UIKit.eyebrow("Incidencia en Vuelo · %s" % UIKit.fmt_met(sim.t), UIKit.ACCENT))
 	top.add_child(UIKit.spacer())
-	top.add_child(UIKit.label("Decide:", 12, UIKit.MUTED))
+	top.add_child(UIKit.label("Rol Responsable:", 12, UIKit.MUTED))
 	top.add_child(UIKit.role_tag(rec["role"]))
 	v.add_child(top)
-	v.add_child(UIKit.label(rec["nombre"], 26, UIKit.INK, true))
-	v.add_child(UIKit.label("Cuándo: " + rec["cuando"], 13, UIKit.MUTED, true))
-	v.add_child(UIKit.label("Impacto: " + rec["impacto"], 15, UIKit.INK, true))
+	
+	var title_lbl := UIKit.label(rec["nombre"], 24, UIKit.INK_BRIGHT)
+	title_lbl.add_theme_font_override("font", UIKit.font_title())
+	v.add_child(title_lbl)
+	
+	v.add_child(UIKit.label("Contexto de vuelo: " + rec["cuando"], 12, UIKit.MUTED, true))
+	v.add_child(UIKit.label("Impacto en subsistemas: " + rec["impacto"], 14, UIKit.INK, true))
 	v.add_child(UIKit.sep())
+	
 	var acts := MissionEvents.actions(sim, rec)
 	for i in acts.size():
 		var a: Dictionary = acts[i]
 		var b := UIKit.button(a["text"] if a["ok"] else a["text"] + "   (" + a["why"] + ")", i == 0 and a["ok"])
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		b.custom_minimum_size.y = 40
+		b.custom_minimum_size.y = 44
 		b.disabled = not a["ok"]
 		b.pressed.connect(func():
 			sim.resolve_event(i)
@@ -358,15 +450,29 @@ func _show_event() -> void:
 		v.add_child(b)
 
 func _show_end() -> void:
-	var v := _modal_panel(UIKit.BAD if sim.lost else UIKit.GOOD)
-	v.add_child(UIKit.eyebrow("Fin de CML 4", UIKit.BAD if sim.lost else UIKit.GOOD))
-	v.add_child(UIKit.label("Nave perdida" if sim.lost else "Misión completada", 30))
 	if sim.lost:
-		v.add_child(UIKit.label(sim.lost_reason.substr(0, 1).to_upper() + sim.lost_reason.substr(1) + ".", 16, UIKit.BAD, true))
-	v.add_child(UIKit.label("Ciencia en tierra: %.0f de %.0f puntos de meta · %s descargados." % [sim.sp, float(sim.sc["meta_sp"]), DesignEval.fmt_mb(sim.mb_down)], 16, UIKit.INK, true))
+		UISound.play_warning()
+	else:
+		UISound.play_success()
+		
+	if main and main.has_method("trigger_alarm"):
+		main.trigger_alarm(false)
+		
+	var v := _modal_panel(UIKit.BAD if sim.lost else UIKit.GOOD)
+	v.add_child(UIKit.eyebrow("Fase de Operaciones Concluida", UIKit.BAD if sim.lost else UIKit.GOOD))
+	
+	var title_lbl := UIKit.label("Nave Perdida" if sim.lost else "Misión de Vuelo Exitosa", 28, UIKit.BAD if sim.lost else UIKit.GOOD)
+	title_lbl.add_theme_font_override("font", UIKit.font_title())
+	v.add_child(title_lbl)
+	
+	if sim.lost:
+		v.add_child(UIKit.label(sim.lost_reason.substr(0, 1).to_upper() + sim.lost_reason.substr(1) + ".", 15, UIKit.BAD, true))
+	v.add_child(UIKit.label("Ciencia descargada: %.0f de %.0f puntos de meta · %s recibidos en estaciones terrestres." % [sim.sp, float(sim.sc["meta_sp"]), DesignEval.fmt_mb(sim.mb_down)], 15, UIKit.INK, true, true))
+	
 	var row := UIKit.hbox(8)
 	row.add_child(UIKit.spacer())
-	var b := UIKit.button("Ver debriefing →", true)
+	var b := UIKit.button("Ver Informe y Debriefing Oficial →", true)
+	b.custom_minimum_size = Vector2(260, 42)
 	b.pressed.connect(func(): main.goto_debrief(sim))
 	row.add_child(b)
 	v.add_child(row)
